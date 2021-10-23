@@ -1,4 +1,6 @@
-﻿using backend_Span_MatejGalic.Models;
+﻿using AutoMapper;
+using backend_Span_MatejGalic.DTOs;
+using backend_Span_MatejGalic.Models;
 using backend_Span_MatejGalic.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,18 +16,19 @@ namespace backend_Span_MatejGalic.Controllers
     {
 
         private readonly IDatabaseRepo _repository;
-        //private readonly IMapper _mapper;
+        private readonly IMapper _mapper;
 
-        public PersonController(IDatabaseRepo repository)
+        public PersonController(IDatabaseRepo repository, IMapper mapper)
         {
-            _repository = repository;            
+            _repository = repository;
+            _mapper = mapper;
         }
 
         public ActionResult<IEnumerable<Person>> GetAllPeople()
         {
             var personItems = _repository.GetAllPeople();
             
-            return Ok(personItems);
+            return Ok(_mapper.Map<IEnumerable<PersonReadDTO>>(personItems));
         }
     }
 }
