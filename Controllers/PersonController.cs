@@ -3,6 +3,7 @@ using backend_Span_MatejGalic.DTOs;
 using backend_Span_MatejGalic.Models;
 using backend_Span_MatejGalic.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,11 +25,30 @@ namespace backend_Span_MatejGalic.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
         public ActionResult<IEnumerable<Person>> GetAllPeople()
         {
             var personItems = _repository.GetAllPeople();
-            
+
             return Ok(_mapper.Map<IEnumerable<PersonReadDTO>>(personItems));
+        }
+
+        [HttpPost]
+        public ActionResult<PersonCreateDTO> CreatePerson(PersonCreateDTO personCreateDTO)
+        {
+            var personModel = _mapper.Map<Person>(personCreateDTO);
+
+            try
+            {
+                _repository.CreatePerson(personModel);
+                _repository.SaveChanges();
+            }
+            catch (SqlException e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            return Ok();
         }
     }
 }
