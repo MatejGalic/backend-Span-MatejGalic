@@ -24,7 +24,7 @@ namespace backend_Span_MatejGalic.Controllers
         public ActionResult<IEnumerable<Person>> GetAllPeople()
         {
             var personItems = _repository.GetAllPeople();
-
+            
             return Ok(personItems);
         }
     }

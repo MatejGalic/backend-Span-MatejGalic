@@ -22,13 +22,12 @@ namespace backend_Span_MatejGalic.Repositories
 
         public IEnumerable<Person> GetAllPeople()
         {
-            return _context.Podaci.ToList();
+            return _context.People.ToList();
         }
 
         public bool SaveChanges()
         {
-            return true;
-            throw new NotImplementedException();
+            return (_context.SaveChanges() >= 0);
         }
     }
 }
