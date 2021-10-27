@@ -16,17 +16,14 @@ namespace backend_Span_MatejGalic.Repositories
             _context = context;
         }
 
-        public void CreatePerson(Person person)
+        public int CreatePerson(Person person)
         {
             if (person == null)
             {
                 throw new ArgumentNullException(nameof(person));
             }
 
-            // pozivanje procedure sa SQL servera
-            // TODO: maknuti eksplicitni ConnectionString
-
-            //using SqlConnection con = new("Data Source = localhost\\SQLEXPRESS; Initial Catalog = MatejTest; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
+            // pozivanje procedure sa SQL servera            
             using SqlConnection con = new(_context.GetConnectionString());
             using SqlCommand cmd = new("InsertPerson", con);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -37,7 +34,7 @@ namespace backend_Span_MatejGalic.Repositories
             cmd.Parameters.Add("@PhoneNumber", SqlDbType.VarChar).Value = person.PhoneNumber.Trim();
 
             con.Open();
-            cmd.ExecuteNonQuery();
+            return cmd.ExecuteNonQuery();
         }
 
         public IEnumerable<Person> GetAllPeople()

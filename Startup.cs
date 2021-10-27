@@ -28,6 +28,18 @@ namespace backend_Span_MatejGalic
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins(Configuration.GetConnectionString("FrontendConnection"))
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                    });
+            });
+
             services.AddDbContext<DatabaseContext>(opt => opt.UseSqlServer
                 (Configuration.GetConnectionString("DatabaseConnection")));
 
@@ -36,7 +48,6 @@ namespace backend_Span_MatejGalic
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped<IDatabaseRepo, SqlDatabaseRepo>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +62,8 @@ namespace backend_Span_MatejGalic
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 

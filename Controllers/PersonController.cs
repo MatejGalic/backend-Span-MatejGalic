@@ -40,15 +40,16 @@ namespace backend_Span_MatejGalic.Controllers
 
             try
             {
-                _repository.CreatePerson(personModel);
+                int rowsAffected = _repository.CreatePerson(personModel);
                 _repository.SaveChanges();
+
+                return Ok(rowsAffected);
             }
             catch (SqlException e)
-            {
+            {                
                 return BadRequest(e.Message);
             }
 
-            return Ok();
         }
     }
 }

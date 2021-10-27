@@ -12,7 +12,7 @@ namespace backend_Span_MatejGalic.Repositories
 
         IEnumerable<Person> GetAllPeople();
 
-        void CreatePerson(Person person);
+        int CreatePerson(Person person);
 
     }
 }
